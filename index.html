@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="listaTelefonica">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="angular.js"></script>
+    <script src="script.js"></script>
+    <link href="bootstrap.css" rel="stylesheet" type="text/css">
+    <title>Lista Telefonica</title>
+    <style>
+        .jumbotron {
+            width: 40%;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 30px;
+
+        }
+
+        .selecionado {
+            background-color: coral;
+        }
+
+        .btn {
+            margin-bottom: 3%
+        }
+
+        a {
+            color: black;
+        }
+
+        #pesquisa {
+            width: 50%;
+            border-radius: 10px;
+            border: black solid 2px;
+            text-align: center;
+        }
+
+        #pesquisa::placeholder {
+            text-align: center;
+        }
+
+        img {
+            margin-left: 3px;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+
+<body ng-controller="TelefonicaCTRL">
+    <div class="jumbotron">
+        <h4>{{message}}</h4> <br>
+        <input type="text" name="pesquisa" id="pesquisa" ng-model="busca" placeholder="O que você está procurando?">
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>
+                    <a href="" ng-click="odernarPor('nome')"> Nome </a>
+                    <img src="images/down-chevron.png" ng-if="!direcao && criterio == 'nome' ">
+                    <img src="images/up-chevron.png" ng-if="direcao && criterio == 'nome' ">
+                </th>
+                <th>
+                    <a href="" ng-click="odernarPor('telefone')">Telefone </a>
+                    <img src="images/down-chevron.png" ng-if="!direcao && criterio == 'telefone' ">
+                    <img src="images/up-chevron.png" ng-if="direcao && criterio == 'telefone' ">
+                </th>
+                <th>
+                    <a href="" ng-click="odernarPor('operadora.nome')">Operadora </a>
+                    <img src="images/down-chevron.png" ng-if="!direcao && criterio == 'operadora.nome' ">
+                    <img src="images/up-chevron.png" ng-if="direcao && criterio == 'operadora.nome' ">
+                </th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="contato in contatos | filter: busca | orderBy:criterio:direcao"
+                ng-class="{selecionado: contato.selecionado}">
+                <td><input type="checkbox" ng-model="contato.selecionado"></td>
+                <td>{{contato.nome}}</td>
+                <td>{{contato.telefone}}</td>
+                <td>{{contato.operadora.nome}}</td>
+                <td>
+                    <div style="width:20px; height:20px;" ng-style="{'background-color': contato.cor}"></div>
+                </td>
+            </tr>
+        </table>
+        <hr>
+        <h3>Cadastrar contato</h3>
+        <form name="contatoFrm">
+            <input type="text" class="form-control" placeholder="Nome" ng-minLength="10" ng-model="contato.nome"
+                ng-required="true" name="nome"> <br>
+            <div ng-show="contatoFrm.nome.$error.required && contatoFrm.nome.$dirty"
+                class="form-control alert alert-danger">
+                Preencha o nome
+            </div>
+            <div ng-show="contatoFrm.nome.$error.minlength" class="form-control alert alert-danger">
+                Tamanho mínimo: 10 caracteres
+            </div>
+            <input type="text" class="form-control" ng-pattern="/^/d{9,8}$/" placeholder="Telefone" ng-minLength="9"
+                ng-model="contato.telefone" ng-required="true" name="telefone"> <br>
+
+            <div ng-show="contatoFrm.telefone.$error.required && contatoFrm.telefone.$dirty"
+                class="form-control alert alert-danger">
+                Telefone é obrigatório
+            </div>
+            <div ng-show="contatoFrm.telefone.$error.pattern" class="form-control alert alert-danger">
+                Telefone inválido
+            </div>
+            <select class="form-control" ng-model="contato.operadora" ng-required="true"
+                ng-options="operadora.nome group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
+                <option value="">Selecione uma operadora</option>
+            </select>
+            <label for="cor">Cor: </label>
+            <input type="color" name="cor" id="cor" value="#ffffff" ng-model="contato.cor">
+        </form>
+        <br>
+        <button class="btn btn-primary form-control" ng-click="adicionar(contato);" ng-disabled="contatoFrm.$invalid">
+            Inserir </button> <br>
+        <button class="btn btn-danger form-control" ng-click="apagar(contatos);" ng-hide="!isSelecionado(contatos)">
+            Apagar </button>
+
+
+
+    </div>
+    <div style="text-align:center">
+        <h4>Criado por Evandro Oliveira com apoio do curso de Rodrigo Branas</h4>
+    </div>
+</body>
+
+</html>
