@@ -42,3 +42,8 @@ angular.module("listaTelefonica").controller("TelefonicaCTRL", function($scope){
 
 
 });
+
+$(document).ready(function(){
+    $("#Telefone").mask("(99) 99999-9999");
+    $("#Telefone").attr("autocomplete", "on");
+});

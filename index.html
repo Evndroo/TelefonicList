@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <script src="angular.js"></script>
+    <script src="jquery.js"></script>
+    <script src="jquery.mask.min.js"></script>
     <script src="script.js"></script>
     <link href="bootstrap.css" rel="stylesheet" type="text/css">
     <title>Lista Telefonica</title>
@@ -94,15 +96,15 @@
             <div ng-show="contatoFrm.nome.$error.minlength" class="form-control alert alert-danger">
                 Tamanho mínimo: 10 caracteres
             </div>
-            <input type="text" class="form-control" ng-pattern="/^/d{9,8}$/" placeholder="Telefone" ng-minLength="9"
-                ng-model="contato.telefone" ng-required="true" name="telefone"> <br>
+            <input type="text" class="form-control" ng-pattern="/^\([1-9]{2}\)\ [0-9]{4,5}-[0-9]{4}$/" placeholder="Celular" ng-minLength="9"
+                ng-model="contato.telefone" ng-required="true" name="telefone" id="Telefone"> <br>
 
             <div ng-show="contatoFrm.telefone.$error.required && contatoFrm.telefone.$dirty"
                 class="form-control alert alert-danger">
-                Telefone é obrigatório
+                Celular é obrigatório
             </div>
             <div ng-show="contatoFrm.telefone.$error.pattern" class="form-control alert alert-danger">
-                Telefone inválido
+                Celular inválido
             </div>
             <select class="form-control" ng-model="contato.operadora" ng-required="true"
                 ng-options="operadora.nome group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
